@@ -42,6 +42,26 @@ router.post("/", async (request, response) => {
   }
 });
 
-router.get("/", async (request, response) => {});
+router.get("/", async (request, response) => {
+  let { limit } = request.query;
+  const { user: from } = request.headers;
+  if (!(await Joi.number().integer().validateAsync(limit))) limit = false;
+
+  try {
+    const db = await connection();
+    const messagesCollection = await db.collection("messages");
+
+    let messages = await messagesCollection.find().toArray();
+    messages = messages
+      .reverse()
+      .filter((message) => message.to === "Todos" || message.to === from);
+
+    if (limit) messages = messages.slice(0, parseInt(limit));
+
+    return response.json(messages);
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 module.exports = router;
