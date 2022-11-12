@@ -39,4 +39,18 @@ router.post("/", async (request, response) => {
   }
 });
 
+router.get("/", async (request, response) => {
+  try {
+    const db = await connection();
+
+    const participantsCollection = db.collection("participants");
+
+    const participants = await participantsCollection.find().toArray();
+
+    return response.send(participants);
+  } catch (err) {
+    return response.sendStatus(400);
+  }
+});
+
 module.exports = router;
