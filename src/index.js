@@ -7,5 +7,5 @@ const app = express();
 dotenv.config();
 
 app.listen(PORT, () => {
-  console.log(`Listening in port ${PORT}`);
+  console.log(`Listening on port ${PORT}`);
 });
