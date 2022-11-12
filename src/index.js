@@ -1,11 +1,13 @@
 const express = require("express");
 const dotenv = require("dotenv");
-
-const PORT = process.env.PORT;
+const cors = require("cors");
 
 const app = express();
+
+app.use("/participants", require("./routes/Participants.js"));
+app.use(cors());
 dotenv.config();
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Listening on port ${process.env.PORT}`);
 });
