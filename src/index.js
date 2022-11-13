@@ -6,6 +6,7 @@ const app = express();
 
 app.use("/participants", require("./routes/Participants.js"));
 app.use("/messages", require("./routes/Messages.js"));
+app.use("/status", require("./routes/Status.js"));
 
 app.use(cors());
 dotenv.config();
