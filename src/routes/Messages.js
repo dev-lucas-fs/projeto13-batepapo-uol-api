@@ -1,10 +1,12 @@
 const dayjs = require("dayjs");
 const express = require("express");
 const Joi = require("joi");
+const cors = require("cors");
 const connection = require("../database");
 
 const router = express.Router();
 router.use(express.json());
+router.use(cors());
 
 const messageSchema = Joi.object({
   to: Joi.string().empty(),

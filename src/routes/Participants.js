@@ -2,9 +2,11 @@ const dayjs = require("dayjs");
 const express = require("express");
 const Joi = require("joi");
 const connection = require("../database");
+const cors = require("cors");
 
 const router = express.Router();
 router.use(express.json());
+router.use(cors());
 
 router.post("/", async (request, response) => {
   const { name } = request.body;
