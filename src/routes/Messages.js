@@ -19,7 +19,7 @@ router.post("/", async (request, response) => {
   const { to, text, type } = request.body;
   const { user: from } = request.headers;
 
-  if (!(await messageSchema.validateAsync({ to, text, type, from })))
+  if (!messageSchema.validate({ to, text, type, from }, { abortEarly: false }))
     return response.sendStatus(422);
 
   try {
@@ -47,7 +47,8 @@ router.post("/", async (request, response) => {
 router.get("/", async (request, response) => {
   let { limit } = request.query;
   const { user: from } = request.headers;
-  if (!(await Joi.number().integer().validateAsync(limit))) limit = false;
+  if (!Joi.number().integer().validate(limit, { abortEarly: false }))
+    limit = false;
 
   try {
     const db = await connection();

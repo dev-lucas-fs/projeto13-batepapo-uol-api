@@ -10,7 +10,7 @@ router.use(cors());
 
 router.post("/", async (request, response) => {
   const { name } = request.body;
-  const isName = await Joi.string().empty("").validateAsync(name);
+  const isName = Joi.string().empty("").validate(name, { abortEarly: false });
   if (!isName) return response.sendStatus(422);
 
   try {

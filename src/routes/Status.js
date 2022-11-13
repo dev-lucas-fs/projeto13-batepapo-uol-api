@@ -12,7 +12,7 @@ router.post("/", async (request, response) => {
 
   console.log(user);
 
-  if (!Joi.string().empty().validateAsync(user))
+  if (!Joi.string().empty().validate(user, { abortEarly: false }))
     return response.sendStatus(404);
 
   try {
