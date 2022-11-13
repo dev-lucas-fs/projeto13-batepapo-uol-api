@@ -63,7 +63,7 @@ router.get("/", async (request, response) => {
 
     return response.json(messages);
   } catch (err) {
-    console.log(err);
+    return response.sendStatus(400);
   }
 });
 
