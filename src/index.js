@@ -27,6 +27,13 @@ async function removeInactiveUsers() {
 
     participants.forEach(async (participant) => {
       await db.collection("participants").deleteOne({ name: participant.name });
+      await db.collection("messages").insertOne({
+        from: participant.name,
+        to: "Todos",
+        text: "sai da sala...",
+        type: "status",
+        time: dayjs(Date.now()).format("HH:mm:ss"),
+      });
     });
   } catch (err) {
     console.log(err);
