@@ -55,9 +55,9 @@ router.get("/", async (request, response) => {
     const messagesCollection = await db.collection("messages");
 
     let messages = await messagesCollection.find().toArray();
-    messages = messages
-      .reverse()
-      .filter((message) => message.to === "Todos" || message.to === from);
+    messages = messages.filter(
+      (message) => message.to === "Todos" || message.to === from
+    );
 
     if (limit) messages = messages.slice(0, parseInt(limit));
 
