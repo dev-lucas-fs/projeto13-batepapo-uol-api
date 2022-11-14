@@ -57,7 +57,8 @@ router.get("/", async (request, response) => {
 
     let messages = await messagesCollection.find().toArray();
     messages = messages.filter(
-      (message) => message.to === "Todos" || message.to === from
+      (message) =>
+        message.to === "Todos" || message.to === from || message.from === from
     );
 
     if (limit) messages = messages.slice(0, parseInt(limit));
