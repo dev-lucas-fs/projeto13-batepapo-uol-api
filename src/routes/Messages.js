@@ -101,4 +101,41 @@ router.delete("/:id", async (request, response) => {
   response.send("OK");
 });
 
+router.put("/:id", async (request, response) => {
+  const { user: from } = request.headers;
+  const { to, text, type } = request.body;
+  const { id } = request.params;
+
+  if (!messageSchema.validate({ to, text, type, from }, { abortEarly: false }))
+    return response.sendStatus(422);
+
+  try {
+    const db = await connection();
+    const participant = await db
+      .collection("participants")
+      .findOne({ name: from });
+
+    if (!participant) return response.sendStatus(404);
+
+    const message = await db
+      .collection("messages")
+      .findOne({ _id: ObjectId(id) });
+
+    console.log(message);
+
+    if (!message) return response.sendStatus(401);
+    if (message.from !== from) return response.sendStatus(404);
+
+    await db
+      .collection("messages")
+      .updateOne({ _id: message._id }, { $set: { to, text, type } });
+
+    return response.sendStatus(200);
+  } catch (err) {
+    response.sendStatus(400);
+  }
+
+  response.send("OK");
+});
+
 module.exports = router;
