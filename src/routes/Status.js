@@ -10,8 +10,6 @@ router.use(cors());
 router.post("/", async (request, response) => {
   const { user } = request.headers;
 
-  console.log(user);
-
   if (!Joi.string().empty().validate(user, { abortEarly: false }))
     return response.sendStatus(404);
 
