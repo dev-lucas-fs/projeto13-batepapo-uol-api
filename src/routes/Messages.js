@@ -3,6 +3,7 @@ const express = require("express");
 const Joi = require("joi");
 const cors = require("cors");
 const connection = require("../database");
+const { ObjectId } = require("mongodb");
 
 const router = express.Router();
 router.use(express.json());
@@ -65,6 +66,39 @@ router.get("/", async (request, response) => {
   } catch (err) {
     return response.sendStatus(400);
   }
+});
+
+router.delete("/:id", async (request, response) => {
+  const { user: from } = request.headers;
+
+  const { id } = request.params;
+
+  console.log(id);
+
+  try {
+    const db = await connection();
+    const participant = await db
+      .collection("participants")
+      .findOne({ name: from });
+
+    if (!participant) return response.sendStatus(404);
+
+    const message = await db
+      .collection("messages")
+      .findOne({ _id: ObjectId(id) });
+
+    console.log(message);
+
+    if (!message || message.from !== from) return response.sendStatus(401);
+
+    await db.collection("messages").deleteOne({ _id: message._id });
+
+    return response.sendStatus(200);
+  } catch (err) {
+    response.sendStatus(400);
+  }
+
+  response.send("OK");
 });
 
 module.exports = router;
